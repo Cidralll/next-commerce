@@ -12,20 +12,27 @@ export default function Checkout() {
     const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
-        fetch('/api/create-payment-intent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                items: cartStore.cart,
-                payment_intend_id: cartStore.paymentIntent
+        if (clientSecret) {
+            return; // Evita a execução adicional
+        }
+
+        if (cartStore.cart.length > 0 && !cartStore.paymentIntent) {    
+            console.log('Exec')
+            fetch('/api/create-payment-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    items: cartStore.cart,
+                    payment_intend_id: cartStore.paymentIntent
+                })
+            }).then((res) => { return res.json() }).then((data) => {
+                cartStore.setPaymentIntent(data.paymentIntent.id);
+                setClientSecret(data.paymentIntent?.client_secret);
             })
-        }).then((res) => { return res.json() }).then((data) => {
-            cartStore.setPaymentIntent(data.paymentIntent.id);
-            setClientSecret(data.paymentIntent?.client_secret);
-        })
-    },[cartStore, cartStore.cart, cartStore.paymentIntent]);
+        }
+    },[cartStore, clientSecret]);
 
     const options: StripeElementsOptions = {
         clientSecret,
