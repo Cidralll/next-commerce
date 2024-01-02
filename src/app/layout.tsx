@@ -10,8 +10,8 @@ import Hydrate from './components/Hydrate'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Next E-Commerce',
-  description: 'Next E-Commerce',
+  title: 'LC E-Commerce',
+  description: 'LC E-Commerce',
 }
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider localization={ptBR}>
-      <html lang="en">
+      <html lang="pt-br">
         <body className={clsx(inter.className, 'bg-slate-700')}>
           <Hydrate>
             <Navbar />
